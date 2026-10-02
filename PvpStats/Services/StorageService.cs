@@ -79,11 +79,15 @@ internal class StorageService {
     }
 
     public PvpMatch? TryGetPvpMatch(string id) {
-        var oid = new ObjectId(id);
+        try {
+            var oid = new ObjectId(id);
 
-        return GetCCMatches().FindOne(x => x.Id == oid) as PvpMatch
-            ?? GetFLMatches().FindOne(x => x.Id == oid) as PvpMatch
-            ?? GetRWMatches().FindOne(x => x.Id == oid);
+            return GetCCMatches().FindOne(x => x.Id == oid) as PvpMatch
+                ?? GetFLMatches().FindOne(x => x.Id == oid) as PvpMatch
+                ?? GetRWMatches().FindOne(x => x.Id == oid);
+        } catch {
+            return null;
+        }
     }
 
     internal ILiteCollection<CrystallineConflictMatch> GetCCMatches() {
